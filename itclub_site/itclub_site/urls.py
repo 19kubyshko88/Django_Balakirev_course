@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from itclub.views import index, groups
+from django.urls import path, include
+from itclub import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('itclub/',index), # http://127.0.0.1:8000/itclub/
-    path('groups/',groups), # http://127.0.0.1:8000/groups/
+    path('', include('itclub.urls')),
+    # если в '' вписать префикс (напр. 'itclub/'), то он будет подставляться перед адресами в itclub.urls,
+    #     т.е. станет '/itclub/'  и '/itclub/groups/' соответственно.
 ]
