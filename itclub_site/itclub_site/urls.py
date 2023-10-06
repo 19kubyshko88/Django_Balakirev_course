@@ -24,3 +24,5 @@ urlpatterns = [
     # если в '' вписать префикс (напр. 'itclub/'), то он будет подставляться перед адресами в itclub.urls,
     #     т.е. станет '/itclub/'  и '/itclub/groups/' соответственно.
 ]
+
+handler404=views.page_not_found
