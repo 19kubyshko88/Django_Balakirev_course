@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpRespons
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.template.defaultfilters import slugify
 
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
@@ -24,13 +25,15 @@ def index(request):  # request  это HttpRequest
     # </html>''')
     # t = render_to_string('itclub/index.html')
     # return HttpResponse(t)
-    data = {'title': "Главная страница ITclub",
+    data = {'title': "главная стр?аница ITclub",
+            'main_title': "",
             'menu': menu,
-            'float': 28.56,
+            'float': 28.57,
             'lst': [1, 2, 'abc', True],
             'set': {1, 1, 2, 3, 2, 5},
             'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
             'obj': MyClass(10, 20),
+            'url': slugify('Slugify from Python')
             }
     return render(request, 'itclub/index.html', context=data)
 
