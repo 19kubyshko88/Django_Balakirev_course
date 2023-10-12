@@ -3,6 +3,14 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 
+menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
+
+
+class MyClass:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
 
 def index(request):  # request  это HttpRequest
     # return HttpResponse('''<!DOCTYPE html>
@@ -16,11 +24,20 @@ def index(request):  # request  это HttpRequest
     # </html>''')
     # t = render_to_string('itclub/index.html')
     # return HttpResponse(t)
-    return render(request, 'itclub/index.html')
+    data = {'title': "Главная страница ITclub",
+            'menu': menu,
+            'float': 28.56,
+            'lst': [1, 2, 'abc', True],
+            'set': {1, 1, 2, 3, 2, 5},
+            'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
+            'obj': MyClass(10, 20),
+            }
+    return render(request, 'itclub/index.html', context=data)
 
 
 def about(request):
-    return render(request, 'itclub/about.html')
+    data = {'title': "О сайте ITclub"}
+    return render(request, 'itclub/about.html', data)
 
 
 def groups(request, groups_id):  # request  это HttpRequest
