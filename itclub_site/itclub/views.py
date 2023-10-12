@@ -1,10 +1,26 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse
 
 
 def index(request):  # request  это HttpRequest
-    return HttpResponse("Страница ITclub")
+    # return HttpResponse('''<!DOCTYPE html>
+    # <html>
+    # <head>
+    #          <title>Мой заголовок</title>
+    # </head>
+    # <body>
+    #  <h1>Привет, мир!</h1>
+    # </body>
+    # </html>''')
+    # t = render_to_string('itclub/index.html')
+    # return HttpResponse(t)
+    return render(request, 'itclub/index.html')
+
+
+def about(request):
+    return render(request, 'itclub/about.html')
 
 
 def groups(request, groups_id):  # request  это HttpRequest
