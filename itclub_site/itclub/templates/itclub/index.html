@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<p>{{ main_title|default:"Без заголовка" }}</p>
-<p>{{ menu }}</p>
-<p>{{ menu|first }}</p>
-<p>{{ menu|last }}</p>
 <p>{{ menu|join:" | " }}</p>
-<p>{{ float|add:"50" }}</p>
-<p>{{ float|divisibleby:"2" }}</p>
-<p>Длина списка {{ lst }} = {{ lst|length }}</p>
-<p>{{ set }}</p>
-<p>{{ dict.key_1 }} {{ dict.key_2 }}</p>
-<p>{{ obj.a }}</p>
-<p>{{ "The main page"|slugify }}</p>
-<p>{{ url }}</p>
-<h1>{{ title|capfirst|cut:" "|cut:"?" }}</h1>
+<ul>
+    {% for p in posts %}
+    <li>
+        <h2>{{ p.title }}</h2>
+        <p>{{ p.content }}</p>
+        <hr>
+    </li>
+    {% endfor %}
+</ul>
 </body>
 </html>

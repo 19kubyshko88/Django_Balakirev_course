@@ -6,35 +6,19 @@ from django.template.defaultfilters import slugify
 
 menu = ["О сайте", "Добавить статью", "Обратная связь", "Войти"]
 
+data_db = [
+    {'id': 1, 'title': 'Анджелина Джоли', 'content': 'Проект Анджелины Джоли', 'is_published': True},
+    {'id': 2, 'title': 'Марго Робби', 'content': 'Проект Марго Робби', 'is_published': False},
+    {'id': 3, 'title': 'Джулия Робертс', 'content': 'Проект Джулия Робертс', 'is_published': True},
+]
 
-class MyClass:
-    def __init__(self, a, b):
-        self.a = a
-        self.b = b
 
-
-def index(request):  # request  это HttpRequest
-    # return HttpResponse('''<!DOCTYPE html>
-    # <html>
-    # <head>
-    #          <title>Мой заголовок</title>
-    # </head>
-    # <body>
-    #  <h1>Привет, мир!</h1>
-    # </body>
-    # </html>''')
-    # t = render_to_string('itclub/index.html')
-    # return HttpResponse(t)
-    data = {'title': "главная стр?аница ITclub",
-            'main_title': "",
-            'menu': menu,
-            'float': 28.57,
-            'lst': [1, 2, 'abc', True],
-            'set': {1, 1, 2, 3, 2, 5},
-            'dict': {'key_1': 'value_1', 'key_2': 'value_2'},
-            'obj': MyClass(10, 20),
-            'url': slugify('Slugify from Python')
-            }
+def index(request):
+    data = {
+        'title': 'Главная страница',
+        'menu': menu,
+        'posts': data_db,
+    }
     return render(request, 'itclub/index.html', context=data)
 
 
