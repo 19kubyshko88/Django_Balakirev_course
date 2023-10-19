@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>{{title}}</h1>
-    {% include 'itclub/includes/nav.html' %}
+    {% include 'itclub/includes/nav.html' only  with title='заголовок' %}
     <ul>
         {% for p in posts %}
             {% if p.is_published %}
