@@ -23,7 +23,7 @@ def index(request):
         'menu': menu,
         'posts': data_db,
     }
-    return render(request, 'itclub/index.html', context=data)
+    return render(request, 'base.html', context=data)
 
 
 def about(request):
