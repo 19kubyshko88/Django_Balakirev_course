@@ -28,7 +28,7 @@ def index(request):
 
 def about(request):
     data = {'title': "О сайте ITclub"}
-    return render(request, 'itclub/about.html', data)
+    return render(request, 'itclub/about.html', {'title':'О сайте', 'menu': menu})
 
 
 def show_post(request, post_id):
