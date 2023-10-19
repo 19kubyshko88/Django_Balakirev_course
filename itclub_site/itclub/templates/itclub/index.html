@@ -2,11 +2,7 @@
 
 {% block content %}
     <h1>{{title}}</h1>
-    <nav>
-             <a href="#">Актрисы</a> |
-             <a href="#">Певицы</a> |
-             <a href="#">Спортсменки</a>
-    </nav>
+    {% include 'itclub/includes/nav.html' %}
     <ul>
         {% for p in posts %}
             {% if p.is_published %}
@@ -21,9 +17,5 @@
             {% endif %}
         {% endfor %}
     </ul>
-    <nav>
-         <a href="#">Актрисы</a> |
-         <a href="#">Певицы</a> |
-         <a href="#">Спортсменки</a>
-    </nav>
+    {% include 'itclub/includes/nav.html' %}
 {% endblock %}
