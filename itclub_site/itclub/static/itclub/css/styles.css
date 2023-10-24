@@ -76,14 +76,22 @@ ul.list-articles li {
 .clear {clear: both;}
 
 .header {
-	background: #3F4137;
+	background: #1A677D;
 	height: 60px;
-}
 
+}
+#img-logo{
+
+  top: 50%;
+  transform: translateY(60%);
+width: 100%;
+}
 .logo {
-	background: url('../images/logo.png') no-repeat 10px 5px;
-	width: 70px;
-	height: 60px;
+  position: relative;
+	background: white;
+	width: 150px;
+	height: 100%;
+	padding-right: 10px;
 }
 
 ul.mainmenu {
@@ -162,7 +170,7 @@ div.button {
 
 .left-chapters {
 	margin: 0;
-	background: #eee;
+	background: #1A487D;
 	border-right: 1px solid #ccc;
 }
 .left-chapters ul {
@@ -174,11 +182,13 @@ div.button {
 }
 .left-chapters ul li {
 	margin: 30px 0 0 0;
-	color: #999;
+    color: #999;
 }
 .left-chapters ul li.selected {color: #0059b2; }
+.left-chapters ul li.selected {color:  #00AAFF;  }
 .left-chapters ul li a {
 	color: #444;
+    color: #ffffff;;
 	text-decoration: none;
 }
 .left-chapters ul li a:hover { color: #CC0000; }
