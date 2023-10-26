@@ -11,8 +11,17 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
         ]
 
 data_db = [
-    {'id': 1, 'title': 'Анджелина Джоли', 'content': 'Проект Анджелины Джоли', 'is_published': True},
-    {'id': 2, 'title': 'Марго Робби', 'content': 'Проект Марго Робби', 'is_published': False},
+    {'id': 1, 'title': 'Анджелина Джоли', 'content': '''<h3>Проект Анджелины</h3> lorem150 ipsum dolor sit amet,\
+    consectetur adipisicing elit. 
+    Alias aliquam animi commodi doloribus ducimus earum, expedita fugit, inventore ipsum\
+     nisi perspiciatis praesentium quia, quos veritatis vitae. Ab aliquid, deleniti deserunt dolores optio ratione \
+     suscipit? Atque eum fuga harum nesciunt quidem! Animi exercitationem molestiae soluta! Ab accusamus consectetur \
+     eligendi et in, laudantium maxime officiis pariatur sapiente sequi vero voluptate voluptatum. Aut deleniti \
+     doloribus explicabo id libero minima molestias nihil officiis perferendis quibusdam quo quod sunt tempore \
+     temporibus, voluptatem. Aspernatur deleniti distinctio enim, eveniet harum id ipsa ipsum iste, laboriosam libero\
+     natus praesentium provident qui quibusdam ratione reiciendis rerum. Autem, nesciunt repellat.''',
+     'is_published': True},
+    {'id': 2, 'title': 'Марго Робби', 'content': 'Проект Марго Робби', 'is_published': True},
     {'id': 3, 'title': 'Джулия Робертс', 'content': 'Проект Джулия Робертс', 'is_published': True},
 ]
 
