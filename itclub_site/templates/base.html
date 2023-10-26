@@ -32,11 +32,9 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		{% getcats as categories %}
+<!--		{% getcats as categories %}-->
 		<li class="selected">Год обучения</li>
-		{% for cat in categories %}
-			<li><a href="{% url 'category' cat.id %}">{{cat.name}}</a></li>
-		{% endfor %}
+		{% show_categories %}
 		<li class="share">
 		<p>Наш канал</p>
 		<a class="share-yt" href="https://www.youtube.com/" target="_blank" rel="nofollow"></a>
