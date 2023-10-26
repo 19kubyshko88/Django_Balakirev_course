@@ -6,7 +6,9 @@
             {% if p.is_published %}
                 <li>
                     <h2>{{ p.title }}</h2>
-                    <p>{{ p.content}}</p>
+                    {% autoescape off %}
+                    <p>{{ p.content|linebreaks|truncatewords:50 }}</p>
+                    {% endautoescape %}
                     <p class="link-read-post"><a href="{% url 'post' p.id %}">Читать пост</a></p>
                 </li>
             {% endif %}
