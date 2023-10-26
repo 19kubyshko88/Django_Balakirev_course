@@ -1,4 +1,6 @@
 {% load static %}
+{% load itclub_tags %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,6 +32,7 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
+		<li>{% get_categories %}</li>
 		<li class="selected">Год обучения</li>
 		<li><a href="#">1 год</a></li>
 		<li><a href="#">2 год</a></li>
