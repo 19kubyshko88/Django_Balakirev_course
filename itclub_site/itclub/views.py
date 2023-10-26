@@ -61,6 +61,11 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
+def show_category(request, cat_id):
+    """Функция-заглушка"""
+    return index(request)
+
+
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
