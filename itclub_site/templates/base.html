@@ -32,7 +32,7 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		{% get_categories as categories %}
+		{% getcats as categories %}
 		<li class="selected">Год обучения</li>
 		{% for cat in categories %}
 			<li><a href="{% url 'category' cat.id %}">{{cat.name}}</a></li>
