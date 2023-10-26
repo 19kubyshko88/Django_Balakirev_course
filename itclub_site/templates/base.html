@@ -33,7 +33,11 @@
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
 <!--		{% getcats as categories %}-->
-		<li class="selected">Год обучения</li>
+		{% if cat_selected == 0 or cat_selected is None %}
+			   <li class="selected">Все года</li>
+		{% else %}
+			   <li><a href="{% url 'home' %}">Все года</a></li>
+		{% endif %}
 		{% show_categories cat_selected %}
 		<li class="share">
 		<p>Наш канал</p>
