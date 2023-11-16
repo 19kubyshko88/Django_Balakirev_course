@@ -33,11 +33,13 @@ cats_db = [
     {'id': 3, 'name': '3 год'},
 ]
 
+
 def index(request):
+    posts = StudentArticles.objects.filter(is_published=1)
     data = {
         'title': 'Главная страница',
         'menu': menu,
-        'posts': data_db,
+        'posts': posts,
         'cat_selected': 0,
     }
     return render(request, 'itclub/index.html', context=data)
