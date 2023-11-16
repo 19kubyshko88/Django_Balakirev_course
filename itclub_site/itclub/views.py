@@ -35,7 +35,7 @@ cats_db = [
 
 
 def index(request):
-    posts = StudentArticles.objects.filter(is_published=1)
+    posts = StudentArticles.published.all()
     data = {
         'title': 'Главная страница',
         'menu': menu,
