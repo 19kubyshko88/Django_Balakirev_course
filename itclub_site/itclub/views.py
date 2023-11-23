@@ -61,10 +61,11 @@ def login(request):
 
 
 def show_category(request, cat_id):
+    posts = StudentArticles.published.all()
     data = {
         'title': 'Отображение по рубрикам',
         'menu': menu,
-        'posts': data_db,
+        'posts': posts,
         'cat_selected': cat_id,
     }
     return render(request, 'itclub/index.html', context=data)
