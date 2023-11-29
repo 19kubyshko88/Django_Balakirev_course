@@ -11,7 +11,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('login/', views.login, name='login'),
     path('post/<slug:post_slug>/', views.show_post, name='post'),
-    path('category/<int:cat_id>/', views.show_category, name='category'),
+    path('category/<slug:cat_slug>/', views.show_category, name='category'),
     path('groups/<int:groups_id>/', views.groups, name='groups_id'),  # http://127.0.0.1:8000/groups/number
     path('groups/<slug:groups_slug>/', views.groups_by_slug, name='groups_slug'),  # http://127.0.0.1:8000/groups/numb-and-let
     # re_path(r'^archive/(?P<year>[0-9]{4})/', views.archive)
