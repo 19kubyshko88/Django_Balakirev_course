@@ -12,12 +12,6 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Войти", 'url_name': 'login'}
         ]
 
-cats_db = [
-    {'id': 1, 'name': '1 год'},
-    {'id': 2, 'name': '2 год'},
-    {'id': 3, 'name': '3 год'},
-]
-
 
 def index(request):
     posts = StudentArticles.published.all()
