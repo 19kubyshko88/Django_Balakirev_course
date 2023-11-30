@@ -18,7 +18,7 @@ class StudentArticles(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     # 'Category'- строка, т.к. класс Category опередлен после StudentArticles. Если перед, то можно без кавычек.
-    cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts')    # null=True временно для создания
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts')
 
     published = PublishedModel()
     objects = models.Manager()  # после published objects надо переопределять, иначе не будет такого поля.
