@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import StudentArticles, Category
+from .models import StudentArticles, Category, TagPost
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
@@ -68,6 +68,19 @@ def show_category(request, cat_slug):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+
+
+def show_tag_postlist(request, tag_slug):
+    tag = get_object_or_404(TagPost, slug=tag_slug)
+    posts = tag.articles.filter(is_published=StudentArticles.Status.PUBLISHED)
+    data = {
+        'title': f'Тег: {tag.tag_name}',
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': None,
+    }
+
+    return render(request, 'itclub/index.html', context=data)
 
 
 def groups(request, groups_id):  # request  это HttpRequest
