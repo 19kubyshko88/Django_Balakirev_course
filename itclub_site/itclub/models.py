@@ -63,6 +63,7 @@ class TagPost(models.Model):
 class Summary(models.Model):
     summary_text = models.TextField(blank=True)
     post_length = models.IntegerField(null=True)
+    update_count = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
         return self.summary_text[:50]
