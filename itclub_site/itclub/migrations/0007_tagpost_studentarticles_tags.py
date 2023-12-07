@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
             name='TagPost',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tag', models.CharField(db_index=True, max_length=100)),
+                ('tag_name', models.CharField(db_index=True, max_length=100)),
                 ('slug', models.SlugField(max_length=255, unique=True)),
             ],
         ),
