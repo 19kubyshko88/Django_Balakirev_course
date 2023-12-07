@@ -20,6 +20,7 @@ class StudentArticles(models.Model):
     # 'Category'- строка, т.к. класс Category опередлен после StudentArticles. Если перед, то можно без кавычек.
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts')
     tags = models.ManyToManyField('TagPost', blank=True, related_name='articles')
+    summary = models.OneToOneField('Summary', on_delete=models.SET_NULL, null=True, blank=True, related_name='related_post')
 
     published = PublishedModel()
     objects = models.Manager()  # после published objects надо переопределять, иначе не будет такого поля.
@@ -57,3 +58,11 @@ class TagPost(models.Model):
 
     def get_absolute_url(self):
         return reverse('tag', kwargs={'tag_slug': self.slug})
+
+
+class Summary(models.Model):
+    summary_text = models.TextField(blank=True)
+    post_length = models.IntegerField(null=True)
+
+    def __str__(self):
+        return self.summary_text[:50]
