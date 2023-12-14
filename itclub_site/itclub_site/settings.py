@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-shl1$)w_&u#3j)qxc)y^t@0ul=3-_cpw1*=nh_3tgn75y67pk8
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
-
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Application definition
 
@@ -38,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'itclub.apps.ItclubConfig'
+    "debug_toolbar",
+    'itclub.apps.ItclubConfig',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'itclub_site.urls'

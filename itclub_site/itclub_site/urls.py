@@ -21,6 +21,7 @@ from itclub import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('itclub.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),
     # если в '' вписать префикс (напр. 'itclub/'), то он будет подставляться перед адресами в itclub.urls,
     #     т.е. станет '/itclub/'  и '/itclub/groups/' соответственно.
 ]
