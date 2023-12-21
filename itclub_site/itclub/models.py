@@ -29,6 +29,8 @@ class StudentArticles(models.Model):
         return self.title
 
     class Meta:
+        verbose_name = 'Статья ученика'
+        verbose_name_plural = 'Статьи учеников'
         ordering = ['-time_create']
         indexes = [
             models.Index(fields=['-time_create']),
