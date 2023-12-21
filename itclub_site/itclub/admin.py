@@ -4,12 +4,13 @@ from .models import StudentArticles, Category
 
 @admin.register(StudentArticles)
 class ArticlesAdmin(admin.ModelAdmin):
-    list_display = ('title', 'time_create', 'is_published', 'brief_info')
+    list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')
     list_display_links = ('title',)
     ordering = ['-time_create', 'title']
     list_editable = ('is_published',)
     list_per_page = 3
     actions = ['set_published', 'set_draft']
+    search_fields = ['title__startswith', 'cat__name']
 
     @staticmethod
     @admin.display(description="Кол-во слов")
