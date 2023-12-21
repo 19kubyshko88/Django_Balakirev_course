@@ -16,15 +16,16 @@ class StudentArticles(models.Model):
     content = models.TextField(blank=True, verbose_name="Текст статьи")
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
     time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT, verbose_name="Статус")
+    is_published = models.BooleanField(choices=((bool(x[0]), x[1]) for x in Status.choices),
+                                       default=Status.DRAFT, verbose_name="Статус")
     # 'Category'- строка, т.к. класс Category опередлен после StudentArticles. Если перед, то можно без кавычек.
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts', verbose_name="Категории")
     tags = models.ManyToManyField('TagPost', blank=True, related_name='articles', verbose_name="Тэги")
     summary = models.OneToOneField('Summary', on_delete=models.SET_NULL, null=True, blank=True,
                                    related_name='related_post', verbose_name="Резюме")
 
+    objects = models.Manager()  # в таком порядке, чтобы отображался статус в админпанели
     published = PublishedModel()
-    objects = models.Manager()  # после published objects надо переопределять, иначе не будет такого поля.
 
     def __str__(self):
         return self.title
