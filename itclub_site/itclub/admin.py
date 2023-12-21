@@ -8,6 +8,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     ordering = ['-time_create', 'title']
     list_editable = ('is_published',)
+    list_per_page = 3
 
 
 @admin.register(Category)
