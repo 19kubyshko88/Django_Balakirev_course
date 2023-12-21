@@ -9,6 +9,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     ordering = ['-time_create', 'title']
     list_editable = ('is_published',)
     list_per_page = 3
+    actions = ['set_published']
 
     @staticmethod
     @admin.display(description="Кол-во слов")
@@ -20,6 +21,9 @@ class ArticlesAdmin(admin.ModelAdmin):
         """
         content: str = st_article.content
         return f"Количество слов: {len(content.split())}"
+
+    def set_published(self, request, queryset):
+        queryset.update(is_published=StudentArticles.Status.PUBLISHED)
 
 
 @admin.register(Category)
