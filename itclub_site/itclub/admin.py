@@ -22,8 +22,11 @@ class ArticlesAdmin(admin.ModelAdmin):
         content: str = st_article.content
         return f"Количество слов: {len(content.split())}"
 
+    @admin.action(description="Опубликовать записи")
     def set_published(self, request, queryset):
         queryset.update(is_published=StudentArticles.Status.PUBLISHED)
+        count = queryset.update(is_published=StudentArticles.Status.PUBLISHED)
+        self.message_user(request, f"Опубликовано {count} записи(ей).")
 
 
 @admin.register(Category)
