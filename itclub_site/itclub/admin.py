@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StudentArticles
+from .models import StudentArticles, Category
 
 
 @admin.register(StudentArticles)
@@ -8,4 +8,8 @@ class ArticlesAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
     ordering = ['-time_create', 'title']
 
-# admin.site.register(StudentArticles, ArticlesAdmin)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
