@@ -1,5 +1,24 @@
 from django.contrib import admin, messages
 from .models import StudentArticles, Category
+from django.db.models import Q
+
+
+class LongArticleFilter(admin.SimpleListFilter):
+    title = 'Длинная ли статья'
+    parameter_name = 'status'
+
+    def lookups(self, request, model_admin):
+        return [
+            ('long', 'Длинная'),
+            ('short', 'Не длинная'),
+        ]
+
+    def queryset(self, request, queryset):
+        # return queryset
+        if self.value() == 'long':
+            return queryset.filter(summary__post_length__gt=200)
+        elif self.value() == 'short':
+            return queryset.filter(Q(summary__post_length__isnull=True) | Q(summary__post_length__lte=200))
 
 
 @admin.register(StudentArticles)
@@ -11,7 +30,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     list_per_page = 3
     actions = ['set_published', 'set_draft']
     search_fields = ['title__startswith', 'cat__name']
-    list_filter = ['cat__name', 'is_published']
+    list_filter = [LongArticleFilter, 'cat__name', 'is_published']
 
     @staticmethod
     @admin.display(description="Кол-во слов")
