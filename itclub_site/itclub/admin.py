@@ -11,6 +11,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     list_per_page = 3
     actions = ['set_published', 'set_draft']
     search_fields = ['title__startswith', 'cat__name']
+    list_filter = ['cat__name', 'is_published']
 
     @staticmethod
     @admin.display(description="Кол-во слов")
