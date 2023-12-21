@@ -14,7 +14,7 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 
 
 def index(request):
-    posts = StudentArticles.published.all()
+    posts = StudentArticles.published.all().select_related('cat')
     data = {
         'title': 'Главная страница',
         'menu': menu,
@@ -56,7 +56,7 @@ def login(request):
 
 def show_category(request, cat_slug):
     category = get_object_or_404(Category, slug=cat_slug)
-    posts = StudentArticles.published.filter(cat_id=category.pk)
+    posts = StudentArticles.published.filter(cat_id=category.pk).select_related('cat')
     data = {
         'title': f'Рубрика: {category.name}',
         'menu': menu,
@@ -72,7 +72,7 @@ def page_not_found(request, exception):
 
 def show_tag_postlist(request, tag_slug):
     tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.articles.filter(is_published=StudentArticles.Status.PUBLISHED)
+    posts = tag.articles.filter(is_published=StudentArticles.Status.PUBLISHED).select_related('cat')
     data = {
         'title': f'Тег: {tag.tag_name}',
         'menu': menu,
