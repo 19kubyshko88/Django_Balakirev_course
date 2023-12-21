@@ -11,16 +11,17 @@ class StudentArticles(models.Model):
     class Status(models.IntegerChoices):
         DRAFT = 0, 'Черновик'
         PUBLISHED = 1, 'Опубликовано'
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
     slug = models.SlugField(max_length=255, db_index=True, unique=True)
-    content = models.TextField(blank=True)
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
+    content = models.TextField(blank=True, verbose_name="Текст статьи")
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
+    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT, verbose_name="Статус")
     # 'Category'- строка, т.к. класс Category опередлен после StudentArticles. Если перед, то можно без кавычек.
-    cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts')
-    tags = models.ManyToManyField('TagPost', blank=True, related_name='articles')
-    summary = models.OneToOneField('Summary', on_delete=models.SET_NULL, null=True, blank=True, related_name='related_post')
+    cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='posts', verbose_name="Категории")
+    tags = models.ManyToManyField('TagPost', blank=True, related_name='articles', verbose_name="Тэги")
+    summary = models.OneToOneField('Summary', on_delete=models.SET_NULL, null=True, blank=True,
+                                   related_name='related_post', verbose_name="Резюме")
 
     published = PublishedModel()
     objects = models.Manager()  # после published objects надо переопределять, иначе не будет такого поля.
