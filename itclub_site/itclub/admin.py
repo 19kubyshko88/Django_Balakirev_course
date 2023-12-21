@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from .models import StudentArticles, Category
 
 
@@ -9,7 +9,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     ordering = ['-time_create', 'title']
     list_editable = ('is_published',)
     list_per_page = 3
-    actions = ['set_published']
+    actions = ['set_published', 'set_draft']
 
     @staticmethod
     @admin.display(description="Кол-во слов")
@@ -27,6 +27,11 @@ class ArticlesAdmin(admin.ModelAdmin):
         queryset.update(is_published=StudentArticles.Status.PUBLISHED)
         count = queryset.update(is_published=StudentArticles.Status.PUBLISHED)
         self.message_user(request, f"Опубликовано {count} записи(ей).")
+
+    @admin.action(description="Снять с публикации выбранные записи")
+    def set_draft(self, request, queryset):
+        count = queryset.update(is_published=StudentArticles.Status.DRAFT)
+        self.message_user(request, f"{count} записи(ей) сняты с публикации!", messages.WARNING)
 
 
 @admin.register(Category)
