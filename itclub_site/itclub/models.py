@@ -43,9 +43,9 @@ class StudentArticles(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
 
-    def save(self, *args, **kwargs):
-        self.slug = transliterate.slugify(self.title )
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     self.slug = transliterate.slugify(self.title )
+    #     super().save(*args, **kwargs)
 
 
 class Category(models.Model):
