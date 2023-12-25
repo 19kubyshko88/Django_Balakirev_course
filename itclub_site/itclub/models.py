@@ -1,5 +1,7 @@
 from django.db import models
 from django.urls import reverse
+# from django.template.defaultfilters import slugify
+import transliterate
 
 
 class PublishedModel(models.Manager):
@@ -40,6 +42,10 @@ class StudentArticles(models.Model):
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = transliterate.slugify(self.title )
+        super().save(*args, **kwargs)
 
 
 class Category(models.Model):
