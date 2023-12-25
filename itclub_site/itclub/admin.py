@@ -23,6 +23,8 @@ class LongArticleFilter(admin.SimpleListFilter):
 
 @admin.register(StudentArticles)
 class ArticlesAdmin(admin.ModelAdmin):
+    # fields = ['title', 'content', 'slug','cat'] # Если не указать cat, то будет ошибка, т.к. обязательное поле
+    exclude = ['tags', 'is_published']
     list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')
     list_display_links = ('title',)
     ordering = ['-time_create', 'title']
