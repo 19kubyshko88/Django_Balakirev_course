@@ -2,7 +2,8 @@
  
 {% block content %}
 <h1>{{title}}</h1>
-<form action="">
+<form action="" method="post">
+    {% csrf_token %}
     <p><label for="id_1">Текст: </label><input type="text" id="id_1" name="field_text"></p>
     <p><label for="id_2">Отметка: </label><input type="checkbox" id="id_2" name="field_check"></p>
     <p><label for="id_3">Число: </label><input type="number" id="id_3" name="field_num"></p>
