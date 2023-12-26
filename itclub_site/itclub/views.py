@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 from .models import StudentArticles, Category, TagPost
+from .forms import AddPostForm
+
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
@@ -43,7 +45,12 @@ def show_post(request, post_slug):
 
 
 def addpage(request):
-    return render(request, 'itclub/addpage.html', {'title':'Добавление страницы', 'menu': menu})
+    form = AddPostForm()
+    data =  {'title':'Добавление страницы',
+             'menu': menu,
+                                        'form': form,
+             }
+    return render(request, 'itclub/addpage.html',data)
 
 
 def contact(request):
