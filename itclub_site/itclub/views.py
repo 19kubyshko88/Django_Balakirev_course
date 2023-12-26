@@ -45,7 +45,13 @@ def show_post(request, post_slug):
 
 
 def addpage(request):
-    form = AddPostForm()
+    if request.method == 'POST':
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = AddPostForm()
+
     data =  {'title':'Добавление страницы',
              'menu': menu,
                                         'form': form,
