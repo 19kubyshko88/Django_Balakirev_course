@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import StudentArticles, Category, TagPost
+from .models import StudentArticles, Category, TagPost, Summary
 from .forms import AddPostForm
 
 
@@ -48,7 +48,14 @@ def addpage(request):
     if request.method == 'POST':
         form = AddPostForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
+            # print(form.cleaned_data)
+            data = form.cleaned_data
+            data['summary'] = Summary.objects.create(summary_text=data['summary'])
+            try:
+                StudentArticles.objects.create(**data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления поста')
     else:
         form = AddPostForm()
 
