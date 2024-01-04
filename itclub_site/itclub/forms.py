@@ -24,9 +24,9 @@ class AddPostForm(forms.Form):
     """
     title = forms.CharField(max_length=255, min_length=5, label="Заголовок",
                             widget=forms.TextInput(attrs={'class': 'form-input'}),
-                            validators=[
-                                SimbolValidator(),
-                            ],
+                            # validators=[
+                            #     SimbolValidator(),
+                            # ],
                             error_messages={
                                 'min_length': 'Слишком короткий заголовок',
                                 'required': 'Без заголовка - никак',
@@ -39,3 +39,10 @@ class AddPostForm(forms.Form):
     is_published = forms.BooleanField(required=False, label="Статус")
     cat = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Категория не выбрана", label="Категории")
     summary = forms.CharField(widget=forms.Textarea(attrs={'cols': 50, 'rows': 5}),  required=False, label="Резюме")
+
+    def clean_title(self):
+        pattern = r'[А-Яа-яA-Za-z]+[\.?!-:\s]'
+        title = self.cleaned_data['title']
+        if not re.match(pattern, title):
+            raise ValidationError("Допустимы русские/английские буквы, пробел и символы: .?-! и пробел.")
+        return title
