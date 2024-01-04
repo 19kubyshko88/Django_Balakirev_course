@@ -1,6 +1,21 @@
 from django import forms
-from .models import Category, Summary
 from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.exceptions import ValidationError
+from django.utils.deconstruct import deconstructible
+from .models import Category, Summary
+import re
+
+@deconstructible
+class SimbolValidator:
+    pattern = r'[А-Яа-яA-Za-z]+[\.?!-:\s]'
+    code = 'valid_title'
+
+    def __init__(self, message=None):
+        self.message = message if message else "Допустимы русские/английские буквы, пробел и символы: .?-! и пробел."
+
+    def __call__(self, value):
+        if not re.match(self.pattern, value):
+            raise ValidationError(self.message, code=self.code, params={"value": value})
 
 
 class AddPostForm(forms.Form):
@@ -9,6 +24,9 @@ class AddPostForm(forms.Form):
     """
     title = forms.CharField(max_length=255, min_length=5, label="Заголовок",
                             widget=forms.TextInput(attrs={'class': 'form-input'}),
+                            validators=[
+                                SimbolValidator(),
+                            ],
                             error_messages={
                                 'min_length': 'Слишком короткий заголовок',
                                 'required': 'Без заголовка - никак',
