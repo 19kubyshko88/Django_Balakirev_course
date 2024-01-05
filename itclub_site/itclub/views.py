@@ -1,12 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
-from django.shortcuts import render, redirect,  get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 from .models import StudentArticles, Category, TagPost, Summary
-from .forms import AddPostForm
-
+from .forms import AddPostForm, UploadFileForm
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Добавить статью", 'url_name': 'add_page'},
@@ -33,11 +32,14 @@ def handle_uploaded_file(f):
 
 
 def about(request):
-    data = {'title': "О сайте ITclub"}
     if request.method == "POST":
-        handle_uploaded_file(request.FILES['file_upload'])
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(form.cleaned_data['file'])
+    else:
+        form = UploadFileForm()
 
-    return render(request, 'itclub/about.html', {'title':'О сайте', 'menu': menu})
+    return render(request, 'itclub/about.html', {'title': 'О сайте', 'menu': menu, 'form': form})
 
 
 def show_post(request, post_slug):
@@ -63,11 +65,11 @@ def addpage(request):
     else:
         form = AddPostForm()
 
-    data =  {'title':'Добавление страницы',
-             'menu': menu,
-                                        'form': form,
-             }
-    return render(request, 'itclub/addpage.html',data)
+    data = {'title': 'Добавление страницы',
+            'menu': menu,
+            'form': form,
+            }
+    return render(request, 'itclub/addpage.html', data)
 
 
 def contact(request):
@@ -112,8 +114,8 @@ def groups(request, groups_id):  # request  это HttpRequest
 
 
 def groups_by_slug(request, groups_slug):  # request  это HttpRequest
-    if request.GET:         # http://127.0.0.1:8000/groups/3d/?day=tuesday&class=1
-        print(request.GET)   # То же request.POST
+    if request.GET:  # http://127.0.0.1:8000/groups/3d/?day=tuesday&class=1
+        print(request.GET)  # То же request.POST
     return HttpResponse(f"<h1>Группы</h1><p>Slug: {groups_slug}</p>")
 
 
@@ -128,6 +130,6 @@ def archive(request, year):
         # uri = reverse('groups', args=('3D', ))
         # return redirect(uri)
         # return HttpResponseRedirect('/')
-        uri = reverse('groups_slug', args=('Scratch', ))
+        uri = reverse('groups_slug', args=('Scratch',))
         return HttpResponsePermanentRedirect(uri)
     return HttpResponse(f"<h1>Архив по годам</h1><p >{year}</p>")
