@@ -8,7 +8,7 @@ import re
 @deconstructible
 class SimbolValidator:
     pattern = r'[А-Яа-яA-Za-z]+[\.?!-:\s]'
-    code = 'valid_title'
+    code = 'valid_simbols'
 
     def __init__(self, message=None):
         self.message = message if message else "Допустимы русские/английские буквы, пробел и символы: .?-! и пробел."
@@ -23,7 +23,11 @@ class AddPostForm(forms.ModelForm):
     класс, описывающий форму добавления статьи
     """
     cat = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Категория не выбрана", label="Категории")
-    summary_text = forms.CharField(widget=forms.Textarea(attrs={'cols': 50, 'rows': 5}),  required=False, label="Резюме")
+    summary_text = forms.CharField(widget=forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+        validators=[
+            SimbolValidator(),
+        ],
+     required=False, label="Резюме")
 
     class Meta:
         model = StudentArticles
@@ -40,3 +44,9 @@ class AddPostForm(forms.ModelForm):
         if commit:
             article.save()
         return article
+
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if len(title) > 50:
+            raise ValidationError('Длина превышает 50 символов')
+        return title
