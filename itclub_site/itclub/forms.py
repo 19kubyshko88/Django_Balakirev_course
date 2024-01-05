@@ -22,7 +22,13 @@ class AddPostForm(forms.ModelForm):
     """
     класс, описывающий форму добавления статьи
     """
+    cat = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Категория не выбрана", label="Категории")
 
     class Meta:
         model = StudentArticles
-        fields = ['title', 'slug', 'content', 'is_published', 'cat', 'tags'] # '__all__' - все поля, кроме автоматич.
+        fields = ['title', 'slug', 'content', 'is_published', 'cat','tags']
+        labels = {'slug': 'URL'}
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-input'}), # css стиль
+            'content': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
+        }
