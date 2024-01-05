@@ -49,13 +49,8 @@ def addpage(request):
         form = AddPostForm(request.POST)
         if form.is_valid():
             # print(form.cleaned_data)
-            data = form.cleaned_data
-            data['summary'] = Summary.objects.create(summary_text=data['summary'])
-            try:
-                StudentArticles.objects.create(**data)
-                return redirect('home')
-            except:
-                form.add_error(None, 'Ошибка добавления поста')
+            form.save()
+            return redirect('home')
     else:
         form = AddPostForm()
 
