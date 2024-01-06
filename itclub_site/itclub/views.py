@@ -4,6 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.views import View
+from django.views.generic import TemplateView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -15,21 +16,34 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
         ]
 
 
-def index(request):
+# def index(request):
+#     posts = StudentArticles.published.all().select_related('cat')
+#     data = {
+#         'title': 'Главная страница',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': 0,
+#     }
+#     return render(request, 'itclub/index.html', context=data)
+
+
+class ArticlesHome(TemplateView):
+    template_name = 'itclub/index.html'
     posts = StudentArticles.published.all().select_related('cat')
-    data = {
+    extra_context = {
         'title': 'Главная страница',
         'menu': menu,
         'posts': posts,
         'cat_selected': 0,
     }
-    return render(request, 'itclub/index.html', context=data)
 
-
-# def handle_uploaded_file(f):
-#     with open(f"uploads/{f.name}", "wb+") as destination:
-#         for chunk in f.chunks():
-#             destination.write(chunk)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = 'Главная страница'
+    #     context['menu'] = menu
+    #     context['posts'] = StudentArticles.published.all().select_related('cat')
+    #     context['cat_selected'] = int(self.request.GET.get('cat_id', 0))
+    #     return context
 
 
 def about(request):  # пропустить
