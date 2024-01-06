@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import StudentArticles, Category, TagPost, Summary
+from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
@@ -25,17 +25,18 @@ def index(request):
     return render(request, 'itclub/index.html', context=data)
 
 
-def handle_uploaded_file(f):
-    with open(f"uploads/{f.name}", "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+# def handle_uploaded_file(f):
+#     with open(f"uploads/{f.name}", "wb+") as destination:
+#         for chunk in f.chunks():
+#             destination.write(chunk)
 
 
-def about(request):
+def about(request):  # пропустить
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(form.cleaned_data['file'])
+            fp = UploadFiles(file=form.cleaned_data['file'])
+            fp.save()
     else:
         form = UploadFileForm()
 
@@ -57,7 +58,7 @@ def show_post(request, post_slug):
 
 def addpage(request):
     if request.method == 'POST':
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
             # print(form.cleaned_data)
             form.save()
