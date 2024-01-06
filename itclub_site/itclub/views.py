@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from django.views import View
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -56,21 +57,42 @@ def show_post(request, post_slug):
     return render(request, 'itclub/post.html', context=data)
 
 
-def addpage(request):
-    if request.method == 'POST':
+# def addpage(request):
+#     if request.method == 'POST':
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # print(form.cleaned_data)
+#             form.save()
+#             return redirect('home')
+#     else:
+#         form = AddPostForm()
+#
+#     data = {'title': 'Добавление страницы',
+#             'menu': menu,
+#             'form': form,
+#             }
+#     return render(request, 'itclub/addpage.html', data)
+
+
+class AddPage(View):
+    def get(self, request):
+        form = AddPostForm()
+        data = {'title': 'Добавление страницы',
+                'menu': menu,
+                'form': form,
+                }
+        return render(request, 'itclub/addpage.html', data)
+
+    def post(self, request):
         form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
-            # print(form.cleaned_data)
             form.save()
             return redirect('home')
-    else:
-        form = AddPostForm()
-
-    data = {'title': 'Добавление страницы',
-            'menu': menu,
-            'form': form,
-            }
-    return render(request, 'itclub/addpage.html', data)
+        data = {'title': 'Добавление страницы',
+                'menu': menu,
+                'form': form,
+                }
+        return render(request, 'itclub/addpage.html', data)
 
 
 def contact(request):
