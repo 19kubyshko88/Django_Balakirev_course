@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
 from itclub import views
+from itclub_site import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +27,9 @@ urlpatterns = [
     # если в '' вписать префикс (напр. 'itclub/'), то он будет подставляться перед адресами в itclub.urls,
     #     т.е. станет '/itclub/'  и '/itclub/groups/' соответственно.
 ]
+
+if settings.DEBUG:  # необходимо только в режиме отладки
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404=views.page_not_found
 
