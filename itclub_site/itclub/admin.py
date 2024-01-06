@@ -1,6 +1,8 @@
 from django.contrib import admin, messages
-from .models import StudentArticles, Category
 from django.db.models import Q
+from django.utils.safestring import mark_safe  # чтобы теги не экранировались и работали как теги
+
+from .models import StudentArticles, Category
 
 
 class LongArticleFilter(admin.SimpleListFilter):
@@ -23,13 +25,13 @@ class LongArticleFilter(admin.SimpleListFilter):
 
 @admin.register(StudentArticles)
 class ArticlesAdmin(admin.ModelAdmin):
-    fields = ['title', 'content', 'slug','cat', 'tags'] # Если не указать cat, то будет ошибка, т.к. обязательное поле
+    fields = ['title', 'content', 'slug', 'photo', 'cat', 'tags']
     # exclude = ['tags', 'is_published']
     # readonly_fields = ['slug']
     prepopulated_fields = {"slug": ("title",)}
     # filter_vertical = ['tags']
     filter_horizontal = ['tags']
-    list_display = ('title', 'time_create', 'is_published', 'cat', 'brief_info')
+    list_display = ('title', 'post_photo', 'time_create', 'is_published', 'cat')
     list_display_links = ('title',)
     ordering = ['-time_create', 'title']
     list_editable = ('is_published',)
@@ -48,6 +50,12 @@ class ArticlesAdmin(admin.ModelAdmin):
         """
         content: str = st_article.content
         return f"Количество слов: {len(content.split())}"
+
+    @admin.display(description="Изображение")
+    def post_photo(self, article: StudentArticles):
+        if article.photo:
+            return mark_safe(f"<img src='{article.photo.url}' width=50>")
+        return "Без фото"
 
     @admin.action(description="Опубликовать записи")
     def set_published(self, request, queryset):
