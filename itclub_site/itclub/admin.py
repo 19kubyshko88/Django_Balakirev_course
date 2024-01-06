@@ -25,9 +25,9 @@ class LongArticleFilter(admin.SimpleListFilter):
 
 @admin.register(StudentArticles)
 class ArticlesAdmin(admin.ModelAdmin):
-    fields = ['title', 'content', 'slug', 'photo', 'cat', 'tags']
+    fields = ['title', 'content', 'slug', 'photo', 'post_photo', 'cat', 'tags']
     # exclude = ['tags', 'is_published']
-    # readonly_fields = ['slug']
+    readonly_fields = ['post_photo']
     prepopulated_fields = {"slug": ("title",)}
     # filter_vertical = ['tags']
     filter_horizontal = ['tags']
@@ -39,6 +39,7 @@ class ArticlesAdmin(admin.ModelAdmin):
     actions = ['set_published', 'set_draft']
     search_fields = ['title__startswith', 'cat__name']
     list_filter = [LongArticleFilter, 'cat__name', 'is_published']
+    save_on_top = True  # чтобы панель сохранения отображалась еще и сверху.
 
     @staticmethod
     @admin.display(description="Кол-во слов")
