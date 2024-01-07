@@ -153,17 +153,34 @@ def page_not_found(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
-def show_tag_postlist(request, tag_slug):
-    tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.articles.filter(is_published=StudentArticles.Status.PUBLISHED).select_related('cat')
-    data = {
-        'title': f'Тег: {tag.tag_name}',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': None,
-    }
+# def show_tag_postlist(request, tag_slug):
+#     tag = get_object_or_404(TagPost, slug=tag_slug)
+#     posts = tag.articles.filter(is_published=StudentArticles.Status.PUBLISHED).select_related('cat')
+#     data = {
+#         'title': f'Тег: {tag.tag_name}',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': None,
+#     }
+#
+#     return render(request, 'itclub/index.html', context=data)
 
-    return render(request, 'itclub/index.html', context=data)
+
+class ArticlesByTag(ListView):
+    template_name = 'itclub/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
+        context['title'] = 'Тег: ' + tag.tag_name
+        context['menu'] = menu
+        context['cat_selected'] = None
+        return context
+
+    def get_queryset(self):
+        return StudentArticles.published.filter(tags__slug=self.kwargs['tag_slug']).select_related('cat')
 
 
 def groups(request, groups_id):  # request  это HttpRequest
