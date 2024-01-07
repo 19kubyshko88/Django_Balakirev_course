@@ -120,16 +120,33 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_category(request, cat_slug):
-    category = get_object_or_404(Category, slug=cat_slug)
-    posts = StudentArticles.published.filter(cat_id=category.pk).select_related('cat')
-    data = {
-        'title': f'Рубрика: {category.name}',
-        'menu': menu,
-        'posts': posts,
-        'cat_selected': category.pk,
-    }
-    return render(request, 'itclub/index.html', context=data)
+# def show_category(request, cat_slug):
+#     category = get_object_or_404(Category, slug=cat_slug)
+#     posts = StudentArticles.published.filter(cat_id=category.pk).select_related('cat')
+#     data = {
+#         'title': f'Рубрика: {category.name}',
+#         'menu': menu,
+#         'posts': posts,
+#         'cat_selected': category.pk,
+#     }
+#     return render(request, 'itclub/index.html', context=data)
+
+
+class ArticlesByCategory(ListView):
+    template_name = 'itclub/index.html'
+    context_object_name = 'posts'
+    allow_empty = False  # для генерации ошибки 404 при неверном слаге в url.
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cat = context['posts'][0].cat
+        context['title'] = 'Категория - ' + cat.name
+        context['menu'] = menu
+        context['cat_selected'] = cat.id
+        return context
+
+    def get_queryset(self):
+        return StudentArticles.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')  # cst_slug из urls
 
 
 def page_not_found(request, exception):
