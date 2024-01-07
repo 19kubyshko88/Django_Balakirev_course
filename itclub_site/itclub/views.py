@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -27,15 +27,18 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 #     return render(request, 'itclub/index.html', context=data)
 
 
-class ArticlesHome(TemplateView):
+class ArticlesHome(ListView):
+    # model = StudentArticles
     template_name = 'itclub/index.html'
-    posts = StudentArticles.published.all().select_related('cat')
-    extra_context = {
+    context_object_name = 'posts'  # для замены имени object_list на posts, чтобы не менять в index.html
+    extra_context = {  # определяет статические (известные) данные (не из GET-запроса)
         'title': 'Главная страница',
         'menu': menu,
-        'posts': posts,
         'cat_selected': 0,
     }
+
+    def get_queryset(self):  # оставляем только опубликованные статьи
+        return StudentArticles.published.all().select_related('cat')
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
