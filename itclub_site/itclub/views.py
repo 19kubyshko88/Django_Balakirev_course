@@ -1,10 +1,10 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.template.defaultfilters import slugify
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -106,25 +106,39 @@ class ShowPost(DetailView):
 #     return render(request, 'itclub/addpage.html', data)
 
 
-class AddPage(View):
-    def get(self, request):
-        form = AddPostForm()
-        data = {'title': 'Добавление страницы',
-                'menu': menu,
-                'form': form,
-                }
-        return render(request, 'itclub/addpage.html', data)
+class AddPage(FormView):
+    form_class = AddPostForm  # класс формы для заполнения. Без вызова (!), т.е. без скобок!
+    template_name = 'itclub/addpage.html'  # по умолчанию в шаблон форма передаётся через переменную form.
+    # Куда отправит после успешного заполнения формы
+    success_url = reverse_lazy('home')  # lazy чтобы маршрут строился не сразу, а только когда необходим. лучше чем reverse.
+    extra_context = {
+        'menu': menu,
+        'title': 'Добавление статьи',
+    }
 
-    def post(self, request):
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-        data = {'title': 'Добавление страницы',
-                'menu': menu,
-                'form': form,
-                }
-        return render(request, 'itclub/addpage.html', data)
+    def form_valid(self, form): # для сохранения в БД. Пройдут только валидные данные.
+        form.save()
+        return super().form_valid(form)
+
+# class AddPage(View):
+#     def get(self, request):
+#         form = AddPostForm()
+#         data = {'title': 'Добавление страницы',
+#                 'menu': menu,
+#                 'form': form,
+#                 }
+#         return render(request, 'itclub/addpage.html', data)
+#
+#     def post(self, request):
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('home')
+#         data = {'title': 'Добавление страницы',
+#                 'menu': menu,
+#                 'form': form,
+#                 }
+#         return render(request, 'itclub/addpage.html', data)
 
 
 def contact(request):
