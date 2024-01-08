@@ -28,15 +28,16 @@ menu = [{'title': "О сайте", 'url_name': 'about'},
 #     return render(request, 'itclub/index.html', context=data)
 
 
-class ArticlesHome(ListView):
-    # model = StudentArticles
+class ArticlesHome(DataMixin, ListView):
     template_name = 'itclub/index.html'
     context_object_name = 'posts'  # для замены имени object_list на posts, чтобы не менять в index.html
-    extra_context = {  # определяет статические (известные) данные (не из GET-запроса)
-        'title': 'Главная страница',
-        'menu': menu,
-        'cat_selected': 0,
-    }
+    title_page = 'Главная страница'
+    cat_selected = 0
+    # extra_context = {  # определяет статические (известные) данные (не из GET-запроса)
+    #     'title': 'Главная страница',
+    #     'menu': menu,
+    #     'cat_selected': 0,
+    # }
 
     def get_queryset(self):  # оставляем только опубликованные статьи
         return StudentArticles.published.all().select_related('cat')
@@ -82,7 +83,7 @@ class ShowPost(DataMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, title=context['post'])
+        return self.get_mixin_context(context, title=context['post'].title)
 
     def get_object(self, queryset=None):  # чтобы нельзя было вручную вбить адрес поста и увидеть его.
         return get_object_or_404(StudentArticles.published, slug=self.kwargs[self.slug_url_kwarg])
@@ -104,26 +105,20 @@ class ShowPost(DataMixin, DetailView):
 #     return render(request, 'itclub/addpage.html', data)
 
 
-class AddPage(CreateView):
+class AddPage(DataMixin, CreateView):
     form_class = AddPostForm  # класс формы для заполнения. Без вызова (!), т.е. без скобок!
     template_name = 'itclub/addpage.html'  # по умолчанию в шаблон форма передаётся через переменную form.
     # Куда отправит после успешного заполнения формы
     # success_url = reverse_lazy('home')  # lazy чтобы маршрут строился не сразу, а только когда необходим. лучше чем reverse.
-    extra_context = {
-        'menu': menu,
-        'title': 'Добавление статьи',
-    }
+    title_page = 'Добавление статьи'
 
 
-class UpdatePage(UpdateView):
+class UpdatePage(DataMixin, UpdateView):
     model = StudentArticles
     fields = ['title', 'content', 'photo', 'is_published', 'cat']
     template_name = 'itclub/addpage.html'
     success_url = reverse_lazy('home')
-    extra_context = {
-        'menu': menu,
-        'title': 'Редактирование статьи',
-    }
+    title_page = 'Редактирование статьи'
 
 
 # class AddPage(View):
@@ -146,13 +141,11 @@ class UpdatePage(UpdateView):
 #                 }
 #         return render(request, 'itclub/addpage.html', data)
 
-class DeletePage(DeleteView):
+class DeletePage(DataMixin, DeleteView):
     model = StudentArticles
     success_url = reverse_lazy("home")
-    extra_context = {
-        'menu': menu,
-        'title': 'Редактирование статьи',
-    }
+    title_page = 'Удаление статьи'
+
 
 
 def contact(request):
