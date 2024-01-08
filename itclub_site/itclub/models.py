@@ -46,7 +46,10 @@ class StudentArticles(models.Model):
         ]
 
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug})
+        if self.is_published:
+            return reverse('post', kwargs={'post_slug': self.slug})
+        else:
+            return reverse('home')
 
     # def save(self, *args, **kwargs):
     #     self.slug = transliterate.slugify(self.title )
