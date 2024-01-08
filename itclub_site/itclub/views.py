@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.template.defaultfilters import slugify
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -114,6 +114,17 @@ class AddPage(CreateView):
     extra_context = {
         'menu': menu,
         'title': 'Добавление статьи',
+    }
+
+
+class UpdatePage(UpdateView):
+    model = StudentArticles
+    fields = ['title', 'content', 'photo', 'is_published', 'cat']
+    template_name = 'itclub/addpage.html'
+    success_url = reverse_lazy('home')
+    extra_context = {
+        'menu': menu,
+        'title': 'Редактирование статьи',
     }
 
 
