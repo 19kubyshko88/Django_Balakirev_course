@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -61,18 +61,33 @@ def about(request):  # пропустить
     return render(request, 'itclub/about.html', {'title': 'О сайте', 'menu': menu, 'form': form})
 
 
-def show_post(request, post_slug):
-    post = get_object_or_404(StudentArticles, slug=post_slug)
+# def show_post(request, post_slug):
+#     post = get_object_or_404(StudentArticles, slug=post_slug)
+#
+#     data = {
+#         'title': post.title,
+#         'menu': menu,
+#         'post': post,
+#         'cat_selected': 1,
+#     }
+#
+#     return render(request, 'itclub/post.html', context=data)
 
-    data = {
-        'title': post.title,
-        'menu': menu,
-        'post': post,
-        'cat_selected': 1,
-    }
 
-    return render(request, 'itclub/post.html', context=data)
+class ShowPost(DetailView):
+    # model = StudentArticles
+    template_name = 'itclub/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'  # чтобы вместо object в post.html подставлялась переменная post
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['post']
+        context['menu'] = menu
+        return context
+
+    def get_object(self, queryset=None):  # чтобы нельзя было вручную вбить адрес поста и увидеть его.
+        return get_object_or_404(StudentArticles.published, slug=self.kwargs[self.slug_url_kwarg])
 
 # def addpage(request):
 #     if request.method == 'POST':
