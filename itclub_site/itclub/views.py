@@ -30,7 +30,7 @@ def about(request):  # пропустить
     else:
         form = UploadFileForm()
 
-    return render(request, 'itclub/about.html', {'title': 'О сайте', 'menu': menu, 'form': form})
+    return render(request, 'itclub/about.html', {'title': 'О сайте', 'form': form})
 
 
 class ShowPost(DataMixin, DetailView):
