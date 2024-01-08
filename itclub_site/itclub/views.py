@@ -16,6 +16,7 @@ class ArticlesHome(DataMixin, ListView):
     context_object_name = 'posts'  # для замены имени object_list на posts, чтобы не менять в index.html
     title_page = 'Главная страница'
     cat_selected = 0
+    paginate_by = 3
 
     def get_queryset(self):  # оставляем только опубликованные статьи
         return StudentArticles.published.all().select_related('cat')
