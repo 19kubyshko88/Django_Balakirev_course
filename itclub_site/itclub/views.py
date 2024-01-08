@@ -4,7 +4,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.template.defaultfilters import slugify
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
@@ -147,6 +147,14 @@ class UpdatePage(UpdateView):
 #                 'form': form,
 #                 }
 #         return render(request, 'itclub/addpage.html', data)
+
+class DeletePage(DeleteView):
+    model = StudentArticles
+    success_url = reverse_lazy("home")
+    extra_context = {
+        'menu': menu,
+        'title': 'Редактирование статьи',
+    }
 
 
 def contact(request):

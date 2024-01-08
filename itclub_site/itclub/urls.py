@@ -10,6 +10,7 @@ urlpatterns = [
     path('addpage/', views.AddPage.as_view(), name='add_page'),
     # path('edit/<int:pk>/', views.UpdatePage.as_view(), name='edit_page'),  # сначала по id проще редактировать
     path('edit/<slug:slug>/', views.UpdatePage.as_view(), name='edit_page'),
+    path('delete/<slug:slug>/', views.DeletePage.as_view(), name='delete_page'),
     path('contact/', views.contact, name='contact'),
     path('login/', views.login, name='login'),
     path('post/<slug:post_slug>/', views.ShowPost.as_view(), name='post'),
