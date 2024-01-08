@@ -6,6 +6,7 @@ from django.template.defaultfilters import slugify
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from .utils import DataMixin
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
 
@@ -74,17 +75,14 @@ def about(request):  # пропустить
 #     return render(request, 'itclub/post.html', context=data)
 
 
-class ShowPost(DetailView):
-    # model = StudentArticles
+class ShowPost(DataMixin, DetailView):
     template_name = 'itclub/post.html'
     slug_url_kwarg = 'post_slug'
     context_object_name = 'post'  # чтобы вместо object в post.html подставлялась переменная post
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = context['post']
-        context['menu'] = menu
-        return context
+        return self.get_mixin_context(context, title=context['post'])
 
     def get_object(self, queryset=None):  # чтобы нельзя было вручную вбить адрес поста и увидеть его.
         return get_object_or_404(StudentArticles.published, slug=self.kwargs[self.slug_url_kwarg])
@@ -177,18 +175,18 @@ def login(request):
 #     return render(request, 'itclub/index.html', context=data)
 
 
-class ArticlesByCategory(ListView):
+class ArticlesByCategory(DataMixin, ListView):
     template_name = 'itclub/index.html'
     context_object_name = 'posts'
     allow_empty = False  # для генерации ошибки 404 при неверном слаге в url.
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cat = context['posts'][0].cat
-        context['title'] = 'Категория - ' + cat.name
-        context['menu'] = menu
-        context['cat_selected'] = cat.id
-        return context
+        return self.get_mixin_context(context,
+                                      title='Категория - ' + cat.name,
+                                      cat_selected=cat.id,
+                                      )
 
     def get_queryset(self):
         return StudentArticles.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')  # cst_slug из urls
@@ -211,7 +209,7 @@ def page_not_found(request, exception):
 #     return render(request, 'itclub/index.html', context=data)
 
 
-class ArticlesByTag(ListView):
+class ArticlesByTag(DataMixin, ListView):
     template_name = 'itclub/index.html'
     context_object_name = 'posts'
     allow_empty = False
@@ -219,10 +217,7 @@ class ArticlesByTag(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         tag = TagPost.objects.get(slug=self.kwargs['tag_slug'])
-        context['title'] = 'Тег: ' + tag.tag_name
-        context['menu'] = menu
-        context['cat_selected'] = None
-        return context
+        return self.get_mixin_context(context, title='Тег: ' + tag.tag_name)
 
     def get_queryset(self):
         return StudentArticles.published.filter(tags__slug=self.kwargs['tag_slug']).select_related('cat')
