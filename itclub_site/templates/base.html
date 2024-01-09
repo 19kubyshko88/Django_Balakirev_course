@@ -16,11 +16,11 @@
 {% block mainmenu %}
 		<div class="header">
 			<ul id="mainmenu" class="mainmenu">
-			<li class="logo"><a href="{% url 'home' %}"><img src="{% static 'itclub/images/logo.png' %}" id='img-logo' alt="logo"></a></li>
-{% for m in mainmenu %}
-	{% if not forloop.last %}<li>{% else %}<li class="last">{% endif %}
-		<a href="{% url m.url_name %}">{{m.title}}</a></li>
-{% endfor %}
+				<li class="logo"><a href="{% url 'home' %}"><img src="{% static 'itclub/images/logo.png' %}" id='img-logo' alt="logo"></a></li>
+				{% for m in mainmenu %}
+					<li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+				{% endfor %}
+				<li class="last"><a href="{% url 'users:login' %}">Войти</a></li>
 			</ul>
 			<div class="clear"></div>
 		</div>
