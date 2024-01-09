@@ -11,7 +11,3 @@ class LoginUser(LoginView):
 
     # def get_success_url(self):  # можно использовать для изменения автоматического перенаправление в профайл
     #     return reverse_lazy('home')
-
-
-def logout_user(request):
-    return HttpResponse("logout")
