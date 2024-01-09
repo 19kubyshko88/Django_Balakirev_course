@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "debug_toolbar",
     'itclub.apps.ItclubConfig',
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
