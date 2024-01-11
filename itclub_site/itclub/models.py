@@ -1,7 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.contrib.auth import get_user_model
 # from django.template.defaultfilters import slugify
+
 import transliterate
 
 
@@ -30,6 +32,9 @@ class StudentArticles(models.Model):
     tags = models.ManyToManyField('TagPost', blank=True, related_name='articles', verbose_name="Тэги")
     summary = models.OneToOneField('Summary', on_delete=models.SET_NULL, null=True, blank=True,
                                    related_name='related_post', verbose_name="Резюме")
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='posts',
+                               null=True, default=None
+                               )
 
     objects = models.Manager()  # в таком порядке, чтобы отображался статус в админпанели
     published = PublishedModel()

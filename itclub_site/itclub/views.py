@@ -53,6 +53,11 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     title_page = 'Добавление статьи'
     # login_url = '/admin/' # ели хотим перебить LOGIN_URL из settings
 
+    def form_valid(self, form):
+        a = form.save(commit=False)
+        a.author = self.request.user
+        return super().form_valid(form)
+
 
 class UpdatePage(DataMixin, UpdateView):
     model = StudentArticles
