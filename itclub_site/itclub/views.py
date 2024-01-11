@@ -1,10 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
+from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .utils import DataMixin
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
@@ -46,10 +47,11 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(StudentArticles.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(DataMixin, CreateView):
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm  # класс формы для заполнения. Без вызова (!), т.е. без скобок!
     template_name = 'itclub/addpage.html'  # по умолчанию в шаблон форма передаётся через переменную form.
     title_page = 'Добавление статьи'
+    # login_url = '/admin/' # ели хотим перебить LOGIN_URL из settings
 
 
 class UpdatePage(DataMixin, UpdateView):
