@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
-from .forms import LoginUserForm
+from .forms import LoginUserForm, RegisterUserForm
+
 
 class LoginUser(LoginView):
     form_class = LoginUserForm
@@ -11,3 +14,11 @@ class LoginUser(LoginView):
 
     # def get_success_url(self):  # можно использовать для изменения автоматического перенаправление в профайл
     #     return reverse_lazy('home')
+
+
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'users/register.html'
+    extra_context = {'title': "Регистрация"}
+    # В модели не определен метод get_absolute_url(), указывающий куда перенаправить пользователя. Поэтому укажем в success_url, иначе ошибка.
+    success_url = reverse_lazy('users:login')
