@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView
-from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 
-from .forms import LoginUserForm, RegisterUserForm
+from .forms import LoginUserForm, RegisterUserForm, ProfileUserForm
 
 
 class LoginUser(LoginView):
@@ -22,3 +24,13 @@ class RegisterUser(CreateView):
     extra_context = {'title': "Регистрация"}
     # В модели не определен метод get_absolute_url(), указывающий куда перенаправить пользователя. Поэтому укажем в success_url, иначе ошибка.
     success_url = reverse_lazy('users:login')
+
+
+class ProfileUser(LoginRequiredMixin, UpdateView):
+    model = get_user_model()
+    form_class = ProfileUserForm
+    template_name = 'users/profile.html'
+    extra_context = {'title': "Профиль пользователя"}
+
+    def get_success_url(self):
+        return reverse_lazy('users:profile', args=[self.request.user.pk])
