@@ -11,6 +11,8 @@ from .utils import DataMixin
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
 from .forms import AddPostForm, UploadFileForm
 
+from django.db.models.signals import pre_save
+
 
 class ArticlesHome(DataMixin, ListView):
     template_name = 'itclub/index.html'
@@ -56,6 +58,7 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     def form_valid(self, form):
         a = form.save(commit=False)
         a.author = self.request.user
+        pre_save.send(sender=StudentArticles, instance=a, form=form)
         return super().form_valid(form)
 
 
@@ -86,6 +89,9 @@ class ArticlesByCategory(DataMixin, ListView):
     context_object_name = 'posts'
     allow_empty = False  # для генерации ошибки 404 при неверном слаге в url.
 
+    def get_queryset(self):
+        return StudentArticles.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cat = context['posts'][0].cat
@@ -94,8 +100,6 @@ class ArticlesByCategory(DataMixin, ListView):
                                       cat_selected=cat.id,
                                       )
 
-    def get_queryset(self):
-        return StudentArticles.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')
 
 
 def page_not_found(request, exception):

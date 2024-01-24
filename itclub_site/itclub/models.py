@@ -3,7 +3,8 @@ from django.urls import reverse
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.contrib.auth import get_user_model
 # from django.template.defaultfilters import slugify
-
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 import transliterate
 
 
@@ -56,10 +57,6 @@ class StudentArticles(models.Model):
         else:
             return reverse('home')
 
-    # def save(self, *args, **kwargs):
-    #     self.slug = transliterate.slugify(self.title )
-    #     super().save(*args, **kwargs)
-
 
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name="Категория")
@@ -98,3 +95,11 @@ class Summary(models.Model):
 
 class UploadFiles(models.Model):
     file = models.FileField(upload_to='uploads_model')
+
+
+@receiver(pre_save, sender=StudentArticles)  # сигнал: при отправке формы перед созданием статьи создать summary
+def create_summary(sender, instance: StudentArticles, **kwargs):
+    if instance.summary_id is None:
+        form = kwargs.get('form')
+        summary_text = form.cleaned_data.get('summary_text')
+        instance.summary = Summary.objects.create(summary_text=summary_text, post_length=len(instance.content))

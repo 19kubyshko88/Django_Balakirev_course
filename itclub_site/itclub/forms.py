@@ -39,13 +39,6 @@ class AddPostForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'cols': 60, 'rows': 10}),
         }
 
-    def save(self, commit=True):
-        article = super().save(commit=False)
-        article.summary = Summary.objects.create(summary_text=self.cleaned_data['summary_text'])
-        if commit:
-            article.save()
-        return article
-
     def clean_title(self):
         title = self.cleaned_data['title']
         if len(title) > 50:
