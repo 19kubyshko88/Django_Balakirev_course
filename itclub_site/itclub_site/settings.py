@@ -150,3 +150,5 @@ AUTHENTICATION_BACKENDS = [
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 AUTH_USER_MODEL = 'users.User'  # указывается имя приложения users, а затем, через точку, имя используемой модели User в текущем проекте фреймворка Django.
+
+DEFAULT_USER_IMAGE = MEDIA_URL + 'users/default.png'
