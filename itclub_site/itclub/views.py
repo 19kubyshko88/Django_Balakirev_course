@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from .utils import DataMixin
 from .models import StudentArticles, Category, TagPost, Summary, UploadFiles
@@ -49,10 +49,11 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(StudentArticles.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm  # класс формы для заполнения. Без вызова (!), т.е. без скобок!
     template_name = 'itclub/addpage.html'  # по умолчанию в шаблон форма передаётся через переменную form.
     title_page = 'Добавление статьи'
+    permission_required = 'itclub.add_studentarticles'
     # login_url = '/admin/' # ели хотим перебить LOGIN_URL из settings
 
     def form_valid(self, form):
@@ -62,12 +63,13 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = StudentArticles
     fields = ['title', 'content', 'photo', 'is_published', 'cat']
     template_name = 'itclub/addpage.html'
     success_url = reverse_lazy('home')
     title_page = 'Редактирование статьи'
+    permission_required = 'itclub.change_studentarticles'
 
 
 class DeletePage(DataMixin, DeleteView):
