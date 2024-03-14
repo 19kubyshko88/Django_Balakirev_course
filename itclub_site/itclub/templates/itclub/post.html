@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block breadcrumbs %}
-{% if perms.itclub.change_studentarticles and request.user.username == post.author.username %}
+{% if perms.itclub.change_studentarticles and request.user.username == post.author.username or request.user.is_superuser %}
 <p ><a href="{% url 'edit_page' post.slug %}">Редактировать</a></p>
 {% endif %}
 
