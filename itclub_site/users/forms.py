@@ -31,17 +31,17 @@ class RegisterUserForm(UserCreationForm):   # при наследовании о
             'last_name': 'Фамилия',
         }
 
-        def clean_email(self):
-            """
-             Проверка на уникальность введенного E-mail адреса.
-             В таблице user это поле не помечено, как уникальное, поэтому разные пользователи могут вводить один и тот
-              же E-mail. Дополнительной проверкой мы это исключим.
-            :return:
-            """
-            email = self.cleaned_data['email']
-            if User.objects.filter(email=email).exists():
-                raise forms.ValidationError("Такой E-mail уже существует!")
-            return email
+    def clean_email(self):
+        """
+         Проверка на уникальность введенного E-mail адреса.
+         В таблице user это поле не помечено, как уникальное, поэтому разные пользователи могут вводить один и тот
+          же E-mail. Дополнительной проверкой мы это исключим.
+        :return:
+        """
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Такой E-mail уже существует!")
+        return email
 
 
 class ProfileUserForm(forms.ModelForm):
